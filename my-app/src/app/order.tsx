@@ -8,9 +8,43 @@ import arrowLeft from '../../assets/img/arrowLeft.png'
 import arrowRight from '../../assets/img/arrowRight.png'
 import burger1 from '../../assets/img/burger1.png'
 import burger2 from '../../assets/img/burger2.png'
+import { useState } from 'react';
 
 
 function App(){
+
+    const arrayOfBurgers = [{
+        id: 1,
+        img: require('../../assets/img/burger1.png'),
+        name: 'Chicken Burger',
+        price: '$3.5'
+    },
+    {  id: 2,
+       img: require('../../assets/img/burger2.png'),
+        name: 'Double Cheesy Burger',
+        price: '$3'
+    }]
+
+    const [currentIndex, setCurrentIndex] = useState(0)
+
+    const burger = arrayOfBurgers[currentIndex]
+    const secondBurger = arrayOfBurgers[(currentIndex === arrayOfBurgers.length -1 ? 0 : currentIndex+1)]
+
+    function swipeRight() {
+        if (currentIndex === arrayOfBurgers.length - 1) {
+            setCurrentIndex(0)
+        } else {
+            setCurrentIndex(currentIndex + 1)
+        }
+        }
+
+    function swipeLeft() {
+        if (currentIndex === 0) {
+            setCurrentIndex(arrayOfBurgers.length - 1)
+        } else {
+            setCurrentIndex(currentIndex - 1)
+        }
+        }
 
   return (<>
       <ImageBackground 
@@ -52,7 +86,7 @@ function App(){
         <Text style={styles.categoriesText}>Burgers</Text>
 
         <View style={styles.foodItems}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=> swipeLeft()}>
                 <Image source={arrowLeft}/>
             </TouchableOpacity>
             <TouchableOpacity style={styles.activeFoodItem}>
@@ -61,17 +95,17 @@ function App(){
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
                     style={styles.activeFoodItemCard}>
-                <Image source={burger1} style={styles.activeFoodItemImg}/>
-                <Text style={styles.activeFoodItemDescription}>Chicken Burger</Text>
-                <Text style={styles.activeFoodItemPrice}>$3.5</Text>
+                <Image source={burger.img} style={styles.activeFoodItemImg}/>
+                <Text style={styles.activeFoodItemDescription}>{burger.name}</Text>
+                <Text style={styles.activeFoodItemPrice}>{burger.price}</Text>
                 </LinearGradient>
             </TouchableOpacity>
             <TouchableOpacity style={styles.regularFoodItem}>
-                <Image source={burger2} style={styles.regularFoodItemImg}/>
-                <Text style={styles.regularFoodItemDescription}>Double Cheesy Burger</Text>
-                <Text style={styles.regularFoodItemPrice}>$3</Text>
+                <Image source={secondBurger.img} style={styles.regularFoodItemImg}/>
+                <Text style={styles.regularFoodItemDescription}>{secondBurger.name}</Text>
+                <Text style={styles.regularFoodItemPrice}>{secondBurger.price}</Text>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=> swipeRight()}>
                 <Image source={arrowRight}/>
             </TouchableOpacity>
         </View>
@@ -198,6 +232,7 @@ const styles = StyleSheet.create({
     activeFoodItemCard:{
         borderRadius: 10,
         width: 150,
+        height: 207,
         paddingTop: 8,
         paddingBottom:25,
         paddingLeft: 10,
@@ -235,7 +270,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 5,
         marginRight: 19,
         width: 119,
-        // height: 165,
+        height: 183,
         borderWidth: 1,
         borderColor: '#918B8B',
         borderRadius: 10
